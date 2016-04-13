@@ -54,6 +54,31 @@ public class MessageController {
         return result;
         
     }
+    
+    public void MessageAdd(Message msg){
+            List.add(msg);
+        
+    }
+    
+    public void MessageEdit(int id, Message msg){
+        int count=0;
+    for(Message m : List){
+        count++;
+        if(m.getId() ==id){
+          List.set(count, m);
+        }
+    }
+    }
+    
+    public void MessageRemove(int id){
+        int count=0;
+        for(Message m : List){
+        count++;
+        if(m.getId() ==id){
+          List.remove(count);
+        }
+    }
+}
 }
 
 
