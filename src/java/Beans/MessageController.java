@@ -8,11 +8,13 @@ package Beans;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.faces.bean.ApplicationScoped;
 
 /**
  *
  * @author Seth
  */
+@ApplicationScoped
 public class MessageController {
     //controls stuff
 

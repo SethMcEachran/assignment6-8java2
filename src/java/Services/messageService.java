@@ -5,10 +5,14 @@
  */
 package Services;
 
+import javax.faces.bean.ApplicationScoped;
+
 /**
  *
  * @author c0611751
  */
+@ApplicationScoped
 public class messageService {
     
 }
+ 
