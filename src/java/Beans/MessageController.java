@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.faces.bean.ApplicationScoped;
+import javax.enterprise.context.ApplicationScoped;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
@@ -71,26 +71,27 @@ public class MessageController {
     
 
     public List<Message> getAll() {
-        List<Message> result = null;
+       this.List = new ArrayList<>();
         try {
      Connection conn = DBConnection.GetAConnection();
-  PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Messages");
+  PreparedStatement pstmt = conn.prepareStatement("SELECT id ,title, contents, author, senttime FROM Messages");
         ResultSet rs = pstmt.executeQuery();
         while(rs.next()){
-            result.add( new Message(
+            List.add( new Message(
                     rs.getInt("id"),
                     rs.getString("title"),
                     rs.getString("contents"),
                     rs.getString("author"),
                     rs.getString("senttime")
             ));
+            System.out.println(rs.getInt("id"));
         }
         
        } catch (SQLException ex) {
                 Logger.getLogger(MessageController.class.getName()).log(Level.SEVERE, null, ex);
         }
        
-          return result;
+          return List;
         
     }
     

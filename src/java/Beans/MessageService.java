@@ -7,6 +7,7 @@ package Beans;
 
 import java.io.StringReader;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.ws.rs.Consumes;
@@ -27,17 +28,17 @@ import javax.ws.rs.core.Response;
  *
  * @author c0611751
  */
- @Path("MessageService")
+@Path("MessageService")
 @ApplicationScoped
 public class MessageService {
 
-    // @Inject
+    @Inject
     private MessageController controller;
 
   @GET
   @Produces("application/json")
   public Response GetAll(){ 
-    
+    controller.getAll();
         return Response.ok(controller.controllerToJson()).build();
       
   }
