@@ -17,11 +17,11 @@ import javax.json.JsonObject;
 public class Message {
    // { "id" : 1, "title" : "Sample Title", "contents" : "Some sample contents for the message.", "author" : "A. Sample", "senttime" : "2016-03-31T13:24:11.135Z" }
     private int id;
-    private String title; 
+    String title; 
 
-    private String contents;
-    private String author;
-    private String senttime;
+    String contents;
+    String author;
+    String senttime;
 
     public Message(int id, String title, String contents, String author, String senttime) {
         this.id = id;
