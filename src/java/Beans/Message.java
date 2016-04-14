@@ -5,8 +5,10 @@
  */
 package Beans;
 
-import java.sql.Time;
-import java.util.Date;
+
+
+import javax.json.Json;
+import javax.json.JsonObject;
 
 /**
  *
@@ -16,15 +18,15 @@ public class Message {
    // { "id" : 1, "title" : "Sample Title", "contents" : "Some sample contents for the message.", "author" : "A. Sample", "senttime" : "2016-03-31T13:24:11.135Z" }
     private int id;
     private String title; 
-    private Date day;
+
     private String contents;
     private String author;
-    private Time senttime;
+    private String senttime;
 
-    public Message(int id, String title, Date day, String contents, String author, Time senttime) {
+    public Message(int id, String title, String contents, String author, String senttime) {
         this.id = id;
         this.title = title;
-        this.day = day;
+        
         this.contents = contents;
         this.author = author;
         this.senttime = senttime;
@@ -49,14 +51,7 @@ public class Message {
         this.title = title;
     }
 
-    public Date getDay() {
-        return day;
-    }
-
-    public void setDay(Date day) {
-        this.day = day;
-    }
-
+   
     public String getContents() {
         return contents;
     }
@@ -73,11 +68,11 @@ public class Message {
         this.author = author;
     }
 
-    public Time getSenttime() {
+    public String getSenttime() {
         return senttime;
     }
 
-    public void setSenttime(Time senttime) {
+    public void setSenttime(String senttime) {
         this.senttime = senttime;
     }
 
@@ -86,10 +81,21 @@ public class Message {
         return "{ \"id\" : "+id+", \"title\" : \""+title+"\", \"contents\" : \""+contents+"\", \"author\" : \""+author+"\", \"senttime\" : \""+senttime+"\" }";
     }
     
-    
-    
-    
-    
-    
-    
+    public JsonObject MessageToJson(){
+        JsonObject object = Json.createObjectBuilder()
+        .add("id",id)
+        .add("title",title)
+        .add("contents",contents)
+        .add("author", author)
+        .add("senttime", senttime)
+        .build();
+        return object;
+    }
 }
+            
+    
+    
+    
+    
+    
+
