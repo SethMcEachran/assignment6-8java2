@@ -24,7 +24,6 @@ import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
 import javax.ws.rs.core.Response;
 
-
 /**
  *
  * @author Seth
@@ -34,166 +33,169 @@ public class MessageController {
     //controls stuff
 
     List<Message> List;
- 
+
     public MessageController() {
         this.List = new ArrayList<>();
 
     }
 
     public Message getMessageById(int id) {
- 
-   for (Message m : List) {
+
+        for (Message m : List) {
             if (m.getId() == id) {
                 return (Message) m;
             }
         }
         return null;
-     
+
     }
-/**
- * 
- * @param start
- * @param end
- * @return 
- */
-    public Message getMessageByDate(String start, String end){
-      for (Message m : List) {
-          try {                                             
-              DateFormat df = new SimpleDateFormat("yyyy-MM-ddThh:mm:ss.SSSZ", Locale.ENGLISH);
-              Date result =  df.parse(m.getSenttime());
-              Date star = df.parse(start);
-              Date en = df.parse(end);
-              if (result.before(en)==true && (result.after(star) == true)) {
-                  return (Message) m;
-              }
-          } catch (ParseException ex) {
-              Logger.getLogger(MessageController.class.getName()).log(Level.SEVERE, null, ex);
-          }
+
+    /**
+     *
+     * @param start
+     * @param end
+     * @return
+     */
+    public Message getMessageByDate(String start, String end) {
+        for (Message m : List) {
+            try {
+                DateFormat df = new SimpleDateFormat("yyyy-MM-ddThh:mm:ss.SSSZ", Locale.ENGLISH);
+                Date result = df.parse(m.getSenttime());
+                Date star = df.parse(start);
+                Date en = df.parse(end);
+                if (result.before(en) == true && (result.after(star) == true)) {
+                    return (Message) m;
+                }
+            } catch (ParseException ex) {
+                Logger.getLogger(MessageController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return null;
-     
+
     }
-    
-/**
- * 
- * @return 
- */
+
+    /**
+     *
+     * @return
+     */
     public List<Message> getAll() {
-       this.List = new ArrayList<>();
+        this.List = new ArrayList<>();
         try {
-     Connection conn = DBConnection.GetAConnection();
-  PreparedStatement pstmt = conn.prepareStatement("SELECT id ,title, contents, author, senttime FROM Messages");
-        ResultSet rs = pstmt.executeQuery();
-        while(rs.next()){
-            List.add( new Message(
-                    rs.getInt("id"),
-                    rs.getString("title"),
-                    rs.getString("contents"),
-                    rs.getString("author"),
-                    rs.getString("senttime")
-            ));
-            System.out.println(rs.getInt("id"));
-        }
-        
-       } catch (SQLException ex) {
-                Logger.getLogger(MessageController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-       
-          return List;
-        
-    }
-   /**
-    * 
-    * @param msg 
-    */ 
-    public void MessageAdd(Message msg){
-            List.add(msg);
-            try {
-               Connection conn = DBConnection.GetAConnection();
-               PreparedStatement pstmt = conn.prepareStatement("INSERT INTO Messages (title, contents, author, senttime) VALUES (?,?,?,?);");
-                pstmt.setString(1, msg.title);
-                pstmt.setString(2, msg.contents);
-                pstmt.setString(3, msg.author);
-                pstmt.setString(4, msg.senttime);
-         } catch (SQLException ex) {
-                Logger.getLogger(MessageController.class.getName()).log(Level.SEVERE, null, ex);
+            Connection conn = DBConnection.GetAConnection();
+            PreparedStatement pstmt = conn.prepareStatement("SELECT id ,title, contents, author, senttime FROM Messages");
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Message mess = new Message(
+                        rs.getInt("id"),
+                        rs.getString("title"),
+                        rs.getString("contents"),
+                        rs.getString("author"),
+                        rs.getString("senttime")
+                );
+//                System.out.println(mess.MessageToJson().toString());
+                List.add(mess);
             }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(MessageController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return List;
+
     }
-  /**
-   * 
-   * @param id
-   * @param msg 
-   */  
-    public void MessageEdit(int id, Message msg){
-        int count=0;
-    for(Message m : List){
-        count++;
-        if(m.getId() ==id){
-            try {
-                List.set(count, m);
-                Connection conn = DBConnection.GetAConnection();
-                PreparedStatement pstmt = conn.prepareStatement("UPDATE Messages SET title = ?, contents = ?, author = ?, senttime = ?  WHERE id = ?");
-                pstmt.setString(1, m.title);
-                pstmt.setString(2, m.contents);
-                pstmt.setString(3, m.author);
-                pstmt.setString(4, m.senttime);
-            } catch (SQLException ex) {
-                Logger.getLogger(MessageController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+
+    /**
+     *
+     * @param msg
+     */
+    public void MessageAdd(Message msg) {
+        List.add(msg);
+        try {
+            Connection conn = DBConnection.GetAConnection();
+            PreparedStatement pstmt = conn.prepareStatement("INSERT INTO Messages (title, contents, author, senttime) VALUES (?,?,?,?);");
+            pstmt.setString(1, msg.title);
+            pstmt.setString(2, msg.contents);
+            pstmt.setString(3, msg.author);
+            pstmt.setString(4, msg.senttime);
+        } catch (SQLException ex) {
+            Logger.getLogger(MessageController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    }
-   /**
-    * 
-    * @param id
-    * @return 
-    */ 
-    public Response MessageRemove(int id){
-        int count=0;
-        for(Message m : List){
-        count++;
-        if(m.getId() ==id){
-          List.remove(count);
-           try {
-              Connection conn = DBConnection.GetAConnection();
-                PreparedStatement pstmt = conn.prepareStatement("DELETE FROM messages WHERE id = ?");
-                pstmt.setInt(1, id);
-                pstmt.executeUpdate();
-            } catch (SQLException ex) {
-                Logger.getLogger(MessageService.class.getName()).log(Level.SEVERE, null, ex);
-                return Response.status(500).entity("Database error").build();
+
+    /**
+     *
+     * @param id
+     * @param msg
+     */
+    public void MessageEdit(int id, Message msg) {
+        int count = 0;
+        for (Message m : List) {
+            count++;
+            if (m.getId() == id) {
+                try {
+                    List.set(count, m);
+                    Connection conn = DBConnection.GetAConnection();
+                    PreparedStatement pstmt = conn.prepareStatement("UPDATE Messages SET title = ?, contents = ?, author = ?, senttime = ?  WHERE id = ?");
+                    pstmt.setString(1, m.title);
+                    pstmt.setString(2, m.contents);
+                    pstmt.setString(3, m.author);
+                    pstmt.setString(4, m.senttime);
+                } catch (SQLException ex) {
+                    Logger.getLogger(MessageController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
     }
+
+    /**
+     *
+     * @param id
+     * @return
+     */
+    public Response MessageRemove(int id) {
+        int count = 0;
+        for (Message m : List) {
+            count++;
+            if (m.getId() == id) {
+                List.remove(count);
+                try {
+                    Connection conn = DBConnection.GetAConnection();
+                    PreparedStatement pstmt = conn.prepareStatement("DELETE FROM messages WHERE id = ?");
+                    pstmt.setInt(1, id);
+                    pstmt.executeUpdate();
+                } catch (SQLException ex) {
+                    Logger.getLogger(MessageService.class.getName()).log(Level.SEVERE, null, ex);
+                    return Response.status(500).entity("Database error").build();
+                }
+            }
+        }
         return Response.status(200).entity("Succesful delete").build();
     }
+
     /**
-     * 
-     * 
+     *
+     *
      * @param mess
-     * @return 
+     * @return
      */
-    public JsonArray controllerToJson(List<Message> mess){
+    public JsonArray controllerToJson(List<Message> mess) {
         JsonArrayBuilder object = Json.createArrayBuilder();
-        for(Message m :  mess){
-   
-         object.add(m.MessageToJson());
-              
-    }
-       object.build();
-       return object.build();
+        for (Message m : mess) {
+
+            object.add(m.MessageToJson());
+
+        }
+  
+        return object.build();
     }
 
     Object controllerToJson() {
         JsonArrayBuilder object = Json.createArrayBuilder();
-        for(Message m :  List){
-   
-         object.add(m.MessageToJson());
-              
-    }
-       object.build();
-       return object.build(); 
+        for (Message m : List) {
+//            System.out.println(m.MessageToJson().toString());
+            object.add(m.MessageToJson());
+        }
+        
+        return object.build();
     }
 }
-
-

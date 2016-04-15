@@ -22,10 +22,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
-
-
-
-
 /**
  *
  * @author c0611751
@@ -35,118 +31,119 @@ import javax.ws.rs.core.Response;
 public class MessageService {
 
     /**
-     * injects 
+     * injects
      */
     @Inject
     private MessageController controller;
-/**
- * 
- * @return entire list
- */
-  @GET
-  @Produces("application/json")
-  public Response GetAll(){ 
-    controller.getAll();
-        
-        
-        return Response.ok(controller.controllerToJson()).build();
-      
-  }
-  /**
-   * 
-   * @param id
-   * @return 
-   */
-  @GET
-  @Path("{id}")
-  @Produces("application/json")
-  public Response GetById(@PathParam("id") int id){
- 
-      
-       return Response.ok(controller.controllerToJson((List<Message>) controller.getMessageById(id))).build();
-  }
-  /**
-   * 
-   * @param start
-   * @param end
-   * @return 
-   */    
-  @GET
-  @Path("{start}/{end}")
-  @Produces
-  public Response GetByDate(@PathParam("start") String start, @PathParam("end") String end){
-      
-       return Response.ok(controller.controllerToJson((List<Message>) controller.getMessageByDate(start, end))).build();
-      
-  }
-  /**
-   * 
-   * @param str
-   * @return 
-   */
-  @POST
-   @Consumes("application/json")
-   @Produces("application/json")
-  public Response NewMessage(String str ){
-       Message newMessage;
-       JsonObject json = Json.createReader(new StringReader(str)).readObject();
-       
-       newMessage = new Message();
-       newMessage.setId(json.getInt("id"));
-       newMessage.setAuthor(json.getString("author"));
-       newMessage.setContents(json.getString("contents"));
-       newMessage.setTitle(json.getString("title"));
-       newMessage.setSenttime(json.getString("senttime")); 
-       controller.MessageAdd(newMessage);
-       return Response.ok(newMessage).build();
-        
-  }
-  /**
-   * 
-   * @param id
-   * @param str
-   * @return 
-   */
-  @PUT
-  @Path("{id}")
-  public Response editMessage(@PathParam("id") int id, String str){
-      
-        Message newMessage;
-       JsonObject json = Json.createReader(new StringReader(str)).readObject();
-       
-       newMessage = new Message();
-       newMessage.setId(json.getInt("id"));
-       newMessage.setAuthor(json.getString("author"));
-       newMessage.setContents(json.getString("contents"));
-       newMessage.setTitle(json.getString("title"));
-       newMessage.setSenttime(json.getString("senttime")); 
-       int count = 0;
-       for(int i = 0; i < controller.getAll().size(); i++ ){
-           if (controller.getAll().get(i).getId() == id) {
-                 controller.MessageEdit(id ,newMessage);
-               return Response.ok(controller.controllerToJson()).build();
-       }
-      
-      
-      
-  }
-   return Response.ok(newMessage).build();
-} 
-  /**
-   * 
-   * @param id
-   * @return 
-   */
-  @DELETE
-  @Path("{id}")
-  public Response DeleteMessage(@PathParam("{id}") int id){
-       int count = 0;
-       for(int i = 0; i < controller.getAll().size(); i++ ){
-           if (controller.getAll().get(i).getId() == id) {
-                 controller.MessageRemove(id);
-           }}
-    return Response.ok().build();
-  }
- }
 
-  
+    /**
+     *
+     * @return entire list
+     */
+    @GET
+    @Produces("application/json")
+    public Response GetAll() {
+        controller.getAll();
+        System.out.println(controller.controllerToJson());
+        return Response.ok(controller.controllerToJson()).build();
+
+    }
+
+    /**
+     *
+     * @param id
+     * @return
+     */
+    @GET
+    @Path("{id}")
+    @Produces("application/json")
+    public Response GetById(@PathParam("id") int id) {
+
+        return Response.ok(controller.controllerToJson((List<Message>) controller.getMessageById(id))).build();
+    }
+
+    /**
+     *
+     * @param start
+     * @param end
+     * @return
+     */
+    @GET
+    @Path("{start}/{end}")
+    @Produces
+    public Response GetByDate(@PathParam("start") String start, @PathParam("end") String end) {
+
+        return Response.ok(controller.controllerToJson((List<Message>) controller.getMessageByDate(start, end))).build();
+
+    }
+
+    /**
+     *
+     * @param str
+     * @return
+     */
+    @POST
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response NewMessage(String str) {
+        Message newMessage;
+        JsonObject json = Json.createReader(new StringReader(str)).readObject();
+
+        newMessage = new Message();
+        newMessage.setId(json.getInt("id"));
+        newMessage.setAuthor(json.getString("author"));
+        newMessage.setContents(json.getString("contents"));
+        newMessage.setTitle(json.getString("title"));
+        newMessage.setSenttime(json.getString("senttime"));
+        controller.MessageAdd(newMessage);
+        return Response.ok(newMessage).build();
+
+    }
+
+    /**
+     *
+     * @param id
+     * @param str
+     * @return
+     */
+    @PUT
+    @Path("{id}")
+    public Response editMessage(@PathParam("id") int id, String str) {
+
+        Message newMessage;
+        JsonObject json = Json.createReader(new StringReader(str)).readObject();
+
+        newMessage = new Message();
+        newMessage.setId(json.getInt("id"));
+        newMessage.setAuthor(json.getString("author"));
+        newMessage.setContents(json.getString("contents"));
+        newMessage.setTitle(json.getString("title"));
+        newMessage.setSenttime(json.getString("senttime"));
+        int count = 0;
+        for (int i = 0; i < controller.getAll().size(); i++) {
+            if (controller.getAll().get(i).getId() == id) {
+                controller.MessageEdit(id, newMessage);
+                return Response.ok(controller.controllerToJson()).build();
+            }
+
+        }
+        return Response.ok(newMessage).build();
+    }
+
+    /**
+     *
+     * @param id
+     * @return
+     */
+    @DELETE
+    @Path("{id}")
+    public Response DeleteMessage(@PathParam("{id}") int id) {
+        int count = 0;
+        for (int i = 0; i < controller.getAll().size(); i++) {
+            if (controller.getAll().get(i).getId() == id) {
+                controller.MessageRemove(id);
+            }
+        }
+        return Response.ok().build();
+    }
+}
