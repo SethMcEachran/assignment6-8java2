@@ -169,9 +169,22 @@ public class MessageController {
     }
     /**
      * 
+     * 
+     * @param mess
      * @return 
      */
-    public JsonArray controllerToJson(){
+    public JsonArray controllerToJson(List<Message> mess){
+        JsonArrayBuilder object = Json.createArrayBuilder();
+        for(Message m :  mess){
+   
+         object.add(m.MessageToJson());
+              
+    }
+       object.build();
+       return object.build();
+    }
+
+    Object controllerToJson() {
         JsonArrayBuilder object = Json.createArrayBuilder();
         for(Message m :  List){
    
@@ -179,7 +192,7 @@ public class MessageController {
               
     }
        object.build();
-       return object.build();
+       return object.build(); 
     }
 }
 

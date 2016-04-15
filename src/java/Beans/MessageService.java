@@ -6,6 +6,7 @@
 package Beans;
 
 import java.io.StringReader;
+import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.json.Json;
@@ -46,9 +47,9 @@ public class MessageService {
   @Produces("application/json")
   public Response GetAll(){ 
     controller.getAll();
-        JsonArray controllerToJson = controller.controllerToJson();
         
-        return Response.ok(controllerToJson).build();
+        
+        return Response.ok(controller.controllerToJson()).build();
       
   }
   /**
@@ -60,9 +61,9 @@ public class MessageService {
   @Path("{id}")
   @Produces("application/json")
   public Response GetById(@PathParam("id") int id){
-      controller.getMessageById(id);
+ 
       
-       return Response.ok(controller.controllerToJson()).build();
+       return Response.ok(controller.controllerToJson((List<Message>) controller.getMessageById(id))).build();
   }
   /**
    * 
@@ -74,8 +75,8 @@ public class MessageService {
   @Path("{start}/{end}")
   @Produces
   public Response GetByDate(@PathParam("start") String start, @PathParam("end") String end){
-      controller.getMessageByDate(start, end);
-       return Response.ok(controller.controllerToJson()).build();
+      
+       return Response.ok(controller.controllerToJson((List<Message>) controller.getMessageByDate(start, end))).build();
       
   }
   /**
