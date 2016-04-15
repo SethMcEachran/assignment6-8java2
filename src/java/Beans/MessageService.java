@@ -6,6 +6,8 @@
 package Beans;
 
 import java.io.StringReader;
+import static java.lang.System.out;
+import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.json.Json;
@@ -45,9 +47,21 @@ public class MessageService {
   @GET
   @Produces("application/json")
   public Response GetAll(){ 
-    controller.getAll();
-        JsonArray controllerToJson = controller.controllerToJson();
-        return Response.ok(controllerToJson).build();
+  
+         List<Message> mess = new MessageController().getAll();
+         StringBuilder jsonArray = new StringBuilder();
+                String prefix = "";                
+                jsonArray.append("[");
+                for (Message l : mess) {                                     
+                    jsonArray.append(prefix);
+                      prefix = ", ";      
+                    jsonArray.append(l.toString());
+                    jsonArray.append(",");
+                }
+                jsonArray.append("]");
+            
+             out.close();
+        return Response.ok(mess).build();
       
   }
   /**
