@@ -50,7 +50,12 @@ public class MessageController {
         return null;
      
     }
-
+/**
+ * 
+ * @param start
+ * @param end
+ * @return 
+ */
     public Message getMessageByDate(String start, String end){
       for (Message m : List) {
           try {                                             
@@ -69,7 +74,10 @@ public class MessageController {
      
     }
     
-
+/**
+ * 
+ * @return 
+ */
     public List<Message> getAll() {
        this.List = new ArrayList<>();
         try {
@@ -94,7 +102,10 @@ public class MessageController {
           return List;
         
     }
-    
+   /**
+    * 
+    * @param msg 
+    */ 
     public void MessageAdd(Message msg){
             List.add(msg);
             try {
@@ -108,7 +119,11 @@ public class MessageController {
                 Logger.getLogger(MessageController.class.getName()).log(Level.SEVERE, null, ex);
             }
     }
-    
+  /**
+   * 
+   * @param id
+   * @param msg 
+   */  
     public void MessageEdit(int id, Message msg){
         int count=0;
     for(Message m : List){
@@ -128,7 +143,11 @@ public class MessageController {
         }
     }
     }
-    
+   /**
+    * 
+    * @param id
+    * @return 
+    */ 
     public Response MessageRemove(int id){
         int count=0;
         for(Message m : List){
@@ -148,6 +167,10 @@ public class MessageController {
     }
         return Response.status(200).entity("Succesful delete").build();
     }
+    /**
+     * 
+     * @return 
+     */
     public JsonArray controllerToJson(){
         JsonArrayBuilder object = Json.createArrayBuilder();
         for(Message m :  List){

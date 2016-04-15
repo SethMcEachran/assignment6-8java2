@@ -9,6 +9,7 @@ import java.io.StringReader;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.json.Json;
+import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -32,17 +33,28 @@ import javax.ws.rs.core.Response;
 @ApplicationScoped
 public class MessageService {
 
+    /**
+     * injects 
+     */
     @Inject
     private MessageController controller;
-
+/**
+ * 
+ * @return entire list
+ */
   @GET
   @Produces("application/json")
   public Response GetAll(){ 
     controller.getAll();
-        return Response.ok(controller.controllerToJson()).build();
+        JsonArray controllerToJson = controller.controllerToJson();
+        return Response.ok(controllerToJson).build();
       
   }
-  
+  /**
+   * 
+   * @param id
+   * @return 
+   */
   @GET
   @Path("{id}")
   @Produces("application/json")
@@ -51,7 +63,12 @@ public class MessageService {
       
        return Response.ok(controller.controllerToJson()).build();
   }
-      
+  /**
+   * 
+   * @param start
+   * @param end
+   * @return 
+   */    
   @GET
   @Path("{start}/{end}")
   @Produces
@@ -60,7 +77,11 @@ public class MessageService {
        return Response.ok(controller.controllerToJson()).build();
       
   }
-  
+  /**
+   * 
+   * @param str
+   * @return 
+   */
   @POST
    @Consumes("application/json")
    @Produces("application/json")
@@ -78,7 +99,12 @@ public class MessageService {
        return Response.ok(newMessage).build();
         
   }
-  
+  /**
+   * 
+   * @param id
+   * @param str
+   * @return 
+   */
   @PUT
   @Path("{id}")
   public Response editMessage(@PathParam("id") int id, String str){
@@ -104,7 +130,11 @@ public class MessageService {
   }
    return Response.ok(newMessage).build();
 } 
-  
+  /**
+   * 
+   * @param id
+   * @return 
+   */
   @DELETE
   @Path("{id}")
   public Response DeleteMessage(@PathParam("{id}") int id){
