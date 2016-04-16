@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,21 +34,21 @@ public class MessageController {
     //controls stuff
 
     List<Message> List;
-
+    
     public MessageController() {
         this.List = new ArrayList<>();
-
+        
     }
-
+    
     public Message getMessageById(int id) {
-
+        
         for (Message m : List) {
             if (m.getId() == id) {
                 return (Message) m;
             }
         }
         return null;
-
+        
     }
 
     /**
@@ -71,7 +72,7 @@ public class MessageController {
             }
         }
         return null;
-
+        
     }
 
     /**
@@ -94,14 +95,15 @@ public class MessageController {
                 );
 //                System.out.println(mess.MessageToJson().toString());
                 List.add(mess);
+//                conn.close();
             }
-
+            
         } catch (SQLException ex) {
             Logger.getLogger(MessageController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
         return List;
-
+        
     }
 
     /**
@@ -109,17 +111,31 @@ public class MessageController {
      * @param msg
      */
     public void MessageAdd(Message msg) {
-        List.add(msg);
+        
         try {
             Connection conn = DBConnection.GetAConnection();
-            PreparedStatement pstmt = conn.prepareStatement("INSERT INTO Messages (title, contents, author, senttime) VALUES (?,?,?,?);");
+            PreparedStatement pstmt = conn.prepareStatement("INSERT INTO Messages (title, contents, author, senttime) VALUES (?,?,?,?);",
+                    Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, msg.title);
             pstmt.setString(2, msg.contents);
             pstmt.setString(3, msg.author);
             pstmt.setString(4, msg.senttime);
+            int rows = pstmt.executeUpdate();
+            if (rows != 0) {
+                try (ResultSet key = pstmt.getGeneratedKeys()) {
+                    if (key.next()) {
+                        int newId = key.getInt(1);
+                        msg.setId(newId);
+                        List.add(msg);
+//                        return newId;
+                    }
+                }
+            }
+            conn.close();
         } catch (SQLException ex) {
             Logger.getLogger(MessageController.class.getName()).log(Level.SEVERE, null, ex);
         }
+//        return 0;
     }
 
     /**
@@ -130,20 +146,35 @@ public class MessageController {
     public void MessageEdit(int id, Message msg) {
         int count = 0;
         for (Message m : List) {
-            count++;
+         
             if (m.getId() == id) {
+               System.out.println("db call");
                 try {
-                    List.set(count, m);
+                    List.set(count, msg);
                     Connection conn = DBConnection.GetAConnection();
-                    PreparedStatement pstmt = conn.prepareStatement("UPDATE Messages SET title = ?, contents = ?, author = ?, senttime = ?  WHERE id = ?");
-                    pstmt.setString(1, m.title);
-                    pstmt.setString(2, m.contents);
-                    pstmt.setString(3, m.author);
-                    pstmt.setString(4, m.senttime);
+                    PreparedStatement pstmt = conn.prepareStatement("UPDATE Messages SET title = ?, contents = ?, author = ?, senttime = ?  WHERE id = ?",Statement.RETURN_GENERATED_KEYS);
+                    pstmt.setString(1, msg.title);
+                    pstmt.setString(2, msg.contents);
+                    pstmt.setString(3, msg.author);
+                    pstmt.setString(4, msg.senttime);
+                    pstmt.setInt(5, id);
+//                    pstmt.execute();
+                
+                     int rows = pstmt.executeUpdate();
+            if (rows != 0) {
+  
+     
+                            System.out.println("db call2");
+//                        return newId;
+            
+            }
+                    conn.close();
+                    
                 } catch (SQLException ex) {
                     Logger.getLogger(MessageController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+               count++;
         }
     }
 
@@ -153,16 +184,20 @@ public class MessageController {
      * @return
      */
     public Response MessageRemove(int id) {
+        System.out.println(id);
         int count = 0;
         for (Message m : List) {
             count++;
             if (m.getId() == id) {
+                
                 List.remove(count);
                 try {
                     Connection conn = DBConnection.GetAConnection();
                     PreparedStatement pstmt = conn.prepareStatement("DELETE FROM messages WHERE id = ?");
                     pstmt.setInt(1, id);
                     pstmt.executeUpdate();
+                    conn.close();
+                    
                 } catch (SQLException ex) {
                     Logger.getLogger(MessageService.class.getName()).log(Level.SEVERE, null, ex);
                     return Response.status(500).entity("Database error").build();
@@ -181,14 +216,14 @@ public class MessageController {
     public JsonArray controllerToJson(List<Message> mess) {
         JsonArrayBuilder object = Json.createArrayBuilder();
         for (Message m : mess) {
-
+            
             object.add(m.MessageToJson());
-
+            
         }
-  
+        
         return object.build();
     }
-
+    
     Object controllerToJson() {
         JsonArrayBuilder object = Json.createArrayBuilder();
         for (Message m : List) {
@@ -198,4 +233,5 @@ public class MessageController {
         
         return object.build();
     }
+    
 }

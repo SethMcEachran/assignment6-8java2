@@ -58,8 +58,8 @@ public class MessageService {
     @Path("{id}")
     @Produces("application/json")
     public Response GetById(@PathParam("id") int id) {
-
-        return Response.ok(controller.controllerToJson((List<Message>) controller.getMessageById(id))).build();
+        controller.getAll();
+        return Response.ok(controller.getMessageById(id).MessageToJson()).build();
     }
 
     /**
@@ -72,7 +72,7 @@ public class MessageService {
     @Path("{start}/{end}")
     @Produces
     public Response GetByDate(@PathParam("start") String start, @PathParam("end") String end) {
-
+        controller.getAll();
         return Response.ok(controller.controllerToJson((List<Message>) controller.getMessageByDate(start, end))).build();
 
     }
@@ -87,15 +87,18 @@ public class MessageService {
     @Produces("application/json")
     public Response NewMessage(String str) {
         Message newMessage;
+        
         JsonObject json = Json.createReader(new StringReader(str)).readObject();
 
         newMessage = new Message();
+
         newMessage.setId(json.getInt("id"));
         newMessage.setAuthor(json.getString("author"));
         newMessage.setContents(json.getString("contents"));
         newMessage.setTitle(json.getString("title"));
         newMessage.setSenttime(json.getString("senttime"));
-        controller.MessageAdd(newMessage);
+         controller.MessageAdd(newMessage);
+//        controller.getAll();
         return Response.ok(newMessage).build();
 
     }
@@ -123,7 +126,7 @@ public class MessageService {
         for (int i = 0; i < controller.getAll().size(); i++) {
             if (controller.getAll().get(i).getId() == id) {
                 controller.MessageEdit(id, newMessage);
-                return Response.ok(controller.controllerToJson()).build();
+                
             }
 
         }
@@ -137,10 +140,13 @@ public class MessageService {
      */
     @DELETE
     @Path("{id}")
-    public Response DeleteMessage(@PathParam("{id}") int id) {
+    public Response DeleteMessage(@PathParam("id") int id) {
+        controller.getAll();
         int count = 0;
+        // System.out.println("hello");
         for (int i = 0; i < controller.getAll().size(); i++) {
             if (controller.getAll().get(i).getId() == id) {
+                System.out.println(i);
                 controller.MessageRemove(id);
             }
         }
