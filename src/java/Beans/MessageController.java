@@ -60,12 +60,20 @@ public class MessageController {
     public Message getMessageByDate(String start, String end) {
         for (Message m : List) {
             try {
-                DateFormat df = new SimpleDateFormat("yyyy-MM-ddThh:mm:ss.SSSZ", Locale.ENGLISH);
+                //T throws an error
+               // DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSSZ", Locale.ENGLISH);
+                DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
                 Date result = df.parse(m.getSenttime());
                 Date star = df.parse(start);
                 Date en = df.parse(end);
                 if (result.before(en) == true && (result.after(star) == true)) {
-                    return (Message) m;
+                     ArrayList<Message> day  = new ArrayList<>();
+               
+                       
+                     
+                    
+                   
+                    return m;
                 }
             } catch (ParseException ex) {
                 Logger.getLogger(MessageController.class.getName()).log(Level.SEVERE, null, ex);
