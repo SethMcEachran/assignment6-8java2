@@ -73,7 +73,7 @@ public class MessageService {
     @Produces
     public Response GetByDate(@PathParam("start") String start, @PathParam("end") String end) {
         controller.getAll();
-        return Response.ok(controller.controllerToJson((List<Message>) controller.getMessageByDate(start, end))).build();
+        return Response.ok(controller.controllerToJson( controller.getMessageByDate(start, end))).build();
 
     }
 
@@ -150,6 +150,6 @@ public class MessageService {
                 controller.MessageRemove(id);
             }
         }
-        return Response.ok().build();
+        return Response.ok(200).build();
     }
 }

@@ -57,7 +57,8 @@ public class MessageController {
      * @param end
      * @return
      */
-    public Message getMessageByDate(String start, String end) {
+    public List<Message> getMessageByDate(String start, String end) {
+         ArrayList<Message> day  = new ArrayList<>();
         for (Message m : List) {
             try {
                 //T throws an error
@@ -67,19 +68,14 @@ public class MessageController {
                 Date star = df.parse(start);
                 Date en = df.parse(end);
                 if (result.before(en) == true && (result.after(star) == true)) {
-                     ArrayList<Message> day  = new ArrayList<>();
-               
-                       
-                     
-                    
-                   
-                    return m;
+                    day.add(m);
+                
                 }
             } catch (ParseException ex) {
                 Logger.getLogger(MessageController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        return null;
+        return day;
         
     }
 
@@ -221,16 +217,18 @@ public class MessageController {
      * @param mess
      * @return
      */
-    public JsonArray controllerToJson(List<Message> mess) {
-        JsonArrayBuilder object = Json.createArrayBuilder();
-        for (Message m : mess) {
-            
-            object.add(m.MessageToJson());
-            
-        }
-        
-        return object.build();
-    }
+  public JsonArray controllerToJson(List<Message> mess) {
+
+       JsonArrayBuilder object = Json.createArrayBuilder();
+            if(mess != null){
+       for (Message m : mess) {
+           
+           object.add(m.MessageToJson());
+           
+       }
+       }
+       return object.build();
+   } 
     
     Object controllerToJson() {
         JsonArrayBuilder object = Json.createArrayBuilder();
