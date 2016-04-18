@@ -6,11 +6,114 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>Assignment 8</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <script src="http://code.jquery.com/jquery.min.js"></script>
+        <script>
+            var wsUri = "ws://localhost:8080/CPD-4414-Messages/messageSocket";
+            $(document).ready(function () {
+                var websocket = new WebSocket(wsUri);
+                websocket.onmessage = function (event) {
+//                    if (typeof evt.data !== 'undefined') {
+//                        var json = $.parseJSON(evt.data);
+                    console.log(event);
+//                    }
+                };
+
+                function getAll() {
+
+                    var data = {"getAll": true};
+                    var json = JSON.stringify(data);
+
+                    websocket.send(json);
+                }
+
+                function getById() {
+
+                    var data = {"getById": 5};
+                    var json = JSON.stringify(data);
+
+                    websocket.send(json);
+                }
+
+                function daySorter() {
+
+                    var data = {"getFromTo": ["2017-01-01", "2018-05-02"]};
+                    var json = JSON.stringify(data);
+
+                    websocket.send(json);
+                }
+
+                function postMessage() {
+
+                    var message = {
+                        "title": "WebSocket Posts",
+                        "contents": "Something Works maybe",
+                        "author": "Seth R. McEachran",
+                        "sentTime": "2017-06-06"
+                    };
+
+                    var data =
+                            {"post":
+                                        {
+                                            "title": "WebSocket Posts",
+                                            "contents": "Something Works maybe",
+                                            "author": "Seth R. McEachran",
+                                            "sentTime": "2017-04-10"
+                                        }
+                            };
+                    var json = JSON.stringify(data);
+
+                    websocket.send(json);
+                }
+
+                function putMessage() {
+
+                    var data =
+                            {"put":
+                                        {
+                                            "title": "WEBSOCKET UPDATE",
+                                           "contents": "Update Works maybe",
+                                            "author": "Seth R. McEachran",
+                                            "sentTime": "2017-04-10"
+                                        }
+                            };
+                    var json = JSON.stringify(data);
+
+                    websocket.send(json);
+                }
+
+                function deleteMessage() {
+
+                    var data = {"delete": 10}
+                    var json = JSON.stringify(data);
+
+                    websocket.send(json);
+                }
+
+
+                $("#getAll").click(getAll);
+                $("#getById").click(getById);
+                $("#getFromTo").click(getFromTo);
+                $("#post").click(postMessage);
+                $("#put").click(putMessage);
+                $("#delete").click(deleteMessage);
+
+            });
+
+        </script>
+
     </head>
     <body>
-        <div>TODO write content later</div>
+        <div>Assignment 8</div>
+        <div><button id="getAll">getAll Method</button><span></span></div>
+        <div><button id="getById">getById: 5</button><span></span></div>
+        <div><button id="daySorter">daySorter: </button><span></span></div>
+        <div><button id="post">post: </button><span></span></div>
+        <div><button id="put">put: </button><span></span></div>
+        <div><button id="delete">delete: </button><span></span></div>
     </body>
 </html>
+
