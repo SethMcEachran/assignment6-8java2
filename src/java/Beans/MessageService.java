@@ -26,7 +26,7 @@ import javax.ws.rs.core.Response;
  *
  * @author c0611751
  */
-@Path("MessageService")
+@Path("/MessageService")
 @ApplicationScoped
 public class MessageService {
 
