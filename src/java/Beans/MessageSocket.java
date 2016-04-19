@@ -100,10 +100,11 @@ public class MessageSocket {
             int id = json.getInt("delete");
           
             controller.MessageRemove(id);
-
+            
+            basic.sendText("{ 'error' : 'Could not remove that message.' }");
         } else {
 
-            basic.sendText("{ 'error' : 'Could not remove that message.' }");
+            basic.sendText("{ 'error' : 'did not call a method.' }");
 
         }
 
