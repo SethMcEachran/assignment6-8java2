@@ -64,17 +64,17 @@ public class MessageSocket {
         } else if (json.containsKey("daySorter")) {
 
             JsonArray array = json.getJsonArray("daySorter");
-            String star = array.getJsonString(0).getString();
-            String en = array.getJsonString(1).getString();
+            String star = array.get(0).toString();
+           String en = array.get(1).toString();
+           System.out.println(star + " " + en);
+           List<Message> messageByDate = controller.getMessageByDate(star, en);
+           if (messageByDate != null) {
+               basic.sendText(controller.controllerToJson(messageByDate).toString());
+           } else {
+               basic.sendText("{ 'error' : 'Failed to get messages in that date range.' }");
+           }
 
-            MessageController messagesbydate = (MessageController) controller.getMessageByDate(star, en);
-            if (messagesbydate != null) {
-                basic.sendText(messagesbydate.controllerToJson().toString());
-            } else {
-                basic.sendText("{ 'error' : 'Failed to get messages in that date range.' }");
-            }
-
-        } else if (json.containsKey("post")) {
+       } else if (json.containsKey("post")) {
 
             String str = json.getJsonObject("post").toString();
             Response newMessage = service.NewMessage(str);
