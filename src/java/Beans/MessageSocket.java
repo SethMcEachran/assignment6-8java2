@@ -64,10 +64,10 @@ public class MessageSocket {
         } else if (json.containsKey("daySorter")) {
 
             JsonArray array = json.getJsonArray("daySorter");
-            String sd = array.getJsonString(0).getString();
-            String ed = array.getJsonString(1).getString();
+            String star = array.getJsonString(0).getString();
+            String en = array.getJsonString(1).getString();
 
-            MessageController messagesbydate = (MessageController) controller.getMessageByDate(sd, ed);
+            MessageController messagesbydate = (MessageController) controller.getMessageByDate(star, en);
             if (messagesbydate != null) {
                 basic.sendText(messagesbydate.controllerToJson().toString());
             } else {

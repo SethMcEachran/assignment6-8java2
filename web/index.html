@@ -44,7 +44,7 @@ and open the template in the editor.
                     websocket.send(json);
                 }
 
-                function postMessage() {
+                function newMessage() {
 
                     var message = {
                         "title": "WebSocket Posts",
@@ -56,6 +56,7 @@ and open the template in the editor.
                     var data =
                             {"post":
                                         {
+                                            "id": "10",
                                             "title": "WebSocket Posts",
                                             "contents": "Something Works maybe",
                                             "author": "Seth R. McEachran",
@@ -67,11 +68,12 @@ and open the template in the editor.
                     websocket.send(json);
                 }
 
-                function putMessage() {
+                function editMessage() {
 
                     var data =
                             {"put":
                                         {
+                                            "id": "4",
                                             "title": "WEBSOCKET UPDATE",
                                            "contents": "Update Works maybe",
                                             "author": "Seth R. McEachran",
@@ -85,7 +87,7 @@ and open the template in the editor.
 
                 function deleteMessage() {
 
-                    var data = {"delete": 10}
+                    var data = {"delete": 2}
                     var json = JSON.stringify(data);
 
                     websocket.send(json);
@@ -95,8 +97,8 @@ and open the template in the editor.
                 $("#getAll").click(getAll);
                 $("#getById").click(getById);
                 $("#daySorter").click(daySorter);
-                $("#post").click(postMessage);
-                $("#put").click(putMessage);
+                $("#post").click(newMessage);
+                $("#put").click(editMessage);
                 $("#delete").click(deleteMessage);
 
             });
@@ -106,7 +108,7 @@ and open the template in the editor.
     </head>
     <body>
         <div>Assignment 8</div>
-        <div><button id="getAll">getAll Method</button><span></span></div>
+        <div><button id="getAll">getAll: </button><span></span></div>
         <div><button id="getById">getById: 5</button><span></span></div>
         <div><button id="daySorter">daySorter: </button><span></span></div>
         <div><button id="post">post: </button><span></span></div>
