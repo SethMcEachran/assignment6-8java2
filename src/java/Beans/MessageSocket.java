@@ -101,7 +101,7 @@ public class MessageSocket {
           
             controller.MessageRemove(id);
             
-            basic.sendText("{ 'error' : 'Could not remove that message.' }");
+            basic.sendText("{ 'error' : 'Could not remove that message or does not exist.' }");
         } else {
 
             basic.sendText("{ 'error' : 'did not call a method.' }");
