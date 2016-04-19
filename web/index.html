@@ -12,14 +12,12 @@ and open the template in the editor.
 
         <script src="http://code.jquery.com/jquery.min.js"></script>
         <script>
-            var wsUri = "ws://localhost:8082/CPD-4414-Messages/MessageSocket";
+            var wsUwsURIri = "ws://localhost:8080/assignment6-8java2/MessageSocket";
+            
             $(document).ready(function () {
                 var websocket = new WebSocket(wsUri);
                 websocket.onmessage = function (event) {
-//                    if (typeof evt.data !== 'undefined') {
-//                        var json = $.parseJSON(evt.data);
                     console.log(event);
-//                    }
                 };
 
                 function getAll() {
