@@ -12,7 +12,7 @@ and open the template in the editor.
 
         <script src="http://code.jquery.com/jquery.min.js"></script>
         <script>
-            var wsUri = "ws://localhost:8080/CPD-4414-Messages/messageSocket";
+            var wsUri = "ws://localhost:8082/CPD-4414-Messages/MessageSocket";
             $(document).ready(function () {
                 var websocket = new WebSocket(wsUri);
                 websocket.onmessage = function (event) {
@@ -96,7 +96,7 @@ and open the template in the editor.
 
                 $("#getAll").click(getAll);
                 $("#getById").click(getById);
-                $("#getFromTo").click(getFromTo);
+                $("#daySorter").click(daySorter);
                 $("#post").click(postMessage);
                 $("#put").click(putMessage);
                 $("#delete").click(deleteMessage);
